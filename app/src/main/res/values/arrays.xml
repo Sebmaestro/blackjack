@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="clubs">
+        <item>@drawable/two_clubs</item>
+        <item>@drawable/three_clubs</item>
+        <item>@drawable/four_clubs</item>
+        <item>@drawable/five_clubs</item>
+        <item>@drawable/six_clubs</item>
+        <item>@drawable/seven_clubs</item>
+        <item>@drawable/eight_clubs</item>
+        <item>@drawable/nine_clubs</item>
+        <item>@drawable/ten_clubs</item>
+        <item>@drawable/jack_clubs</item>
+        <item>@drawable/queen_clubs</item>
+        <item>@drawable/king_clubs</item>
+        <item>@drawable/ace_clubs</item>
+    </integer-array>
+
+    <integer-array name="spades">
+        <item>@drawable/two_spades</item>
+        <item>@drawable/three_spades</item>
+        <item>@drawable/four_spades</item>
+        <item>@drawable/five_spades</item>
+        <item>@drawable/six_spades</item>
+        <item>@drawable/seven_spades</item>
+        <item>@drawable/eight_spades</item>
+        <item>@drawable/nine_spades</item>
+        <item>@drawable/ten_spades</item>
+        <item>@drawable/jack_spades</item>
+        <item>@drawable/queen_spades</item>
+        <item>@drawable/king_spades</item>
+        <item>@drawable/ace_spades</item>
+    </integer-array>
+
+    <integer-array name="hearts">
+        <item>@drawable/two_hearts</item>
+        <item>@drawable/three_hearts</item>
+        <item>@drawable/four_hearts</item>
+        <item>@drawable/five_hearts</item>
+        <item>@drawable/six_hearts</item>
+        <item>@drawable/seven_hearts</item>
+        <item>@drawable/eight_hearts</item>
+        <item>@drawable/nine_hearts</item>
+        <item>@drawable/ten_hearts</item>
+        <item>@drawable/jack_hearts</item>
+        <item>@drawable/queen_hearts</item>
+        <item>@drawable/king_hearts</item>
+        <item>@drawable/ace_hearts</item>
+    </integer-array>
+
+    <integer-array name="diamonds">
+        <item>@drawable/two_diamonds</item>
+        <item>@drawable/three_diamonds</item>
+        <item>@drawable/four_diamonds</item>
+        <item>@drawable/five_diamonds</item>
+        <item>@drawable/six_diamonds</item>
+        <item>@drawable/seven_diamonds</item>
+        <item>@drawable/eight_diamonds</item>
+        <item>@drawable/nine_diamonds</item>
+        <item>@drawable/ten_diamonds</item>
+        <item>@drawable/jack_diamonds</item>
+        <item>@drawable/queen_diamonds</item>
+        <item>@drawable/king_diamonds</item>
+        <item>@drawable/ace_diamonds</item>
+    </integer-array>
+</resources>

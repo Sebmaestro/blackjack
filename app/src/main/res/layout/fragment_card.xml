@@ -28,22 +28,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/startImage1"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:src="@drawable/a_d" />
+            android:src="@drawable/ace_diamonds" />
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/startImage2"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:src="@drawable/a_c" />
+            android:src="@drawable/ace_clubs" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/startImage3"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:src="@drawable/a_h" />
+            android:src="@drawable/ace_hearts" />
     </LinearLayout>
 
 
@@ -62,22 +62,22 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/imageView8"
+            android:id="@+id/startImage4"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:src="@drawable/c_4" />
+            android:src="@drawable/four_clubs" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/startImage5"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:src="@drawable/c_10" />
+            android:src="@drawable/ten_clubs" />
 
         <ImageView
-            android:id="@+id/imageView9"
+            android:id="@+id/startImage6"
             android:layout_width="100dp"
             android:layout_height="150dp"
-            android:src="@drawable/c_6" />
+            android:src="@drawable/six_clubs" />
     </LinearLayout>
 
     <TextView

@@ -1,5 +1,8 @@
 package c17sal.cs.umu.se.blackjacklab3.model;
 
-public class Deck
+import java.util.ArrayList;
+
+public class Game
 {
+
 }
