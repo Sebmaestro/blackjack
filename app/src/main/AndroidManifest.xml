@@ -12,6 +12,7 @@
         <activity
             android:name=".controller.gameActivity.GameActivity"
             android:label="@string/title_activity_game"
+            android:parentActivityName=".controller.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".controller.MainActivity"

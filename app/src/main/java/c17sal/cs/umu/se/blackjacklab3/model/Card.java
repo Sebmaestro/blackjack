@@ -3,7 +3,7 @@ package c17sal.cs.umu.se.blackjacklab3.model;
 public class Card
 {
     private Suit suit;
-    private String value;
+    private int value;
     private int imageId;
 
     public enum Suit
@@ -11,31 +11,29 @@ public class Card
         SPADES, CLUBS, HEARTS, DIAMONDS
     }
 
-    public Card(Suit suit, String value, int imageId)
+    public Card(Suit suit, int value, int imageId)
     {
         this.suit = suit;
         this.imageId = imageId;
 
-
         switch (value)
         {
-            case "14":
-                this.value = "ace";
+            case 14:
+                this.value = 11;
                 break;
-            case "13":
-                this.value = "king";
+            case 13:
+                this.value = 10;
                 break;
-            case "12":
-                this.value = "queen";
+            case 12:
+                this.value = 10;
                 break;
-            case "11":
-                this.value = "jack";
+            case 11:
+                this.value = 10;
                 break;
             default:
                 this.value = value;
                 break;
         }
-
     }
 
     public Suit getSuit()
@@ -48,7 +46,7 @@ public class Card
         this.suit = suit;
     }
 
-    public String getValue()
+    public int getValue()
     {
         return value;
     }

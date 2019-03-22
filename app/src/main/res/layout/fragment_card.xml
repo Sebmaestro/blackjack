@@ -28,21 +28,27 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/startImage1"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:id="@+id/dealer1"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:src="@drawable/ace_diamonds" />
 
         <ImageView
-            android:id="@+id/startImage2"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:id="@+id/dealer2"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
             android:src="@drawable/ace_clubs" />
 
         <ImageView
-            android:id="@+id/startImage3"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:id="@+id/dealer3"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ace_hearts" />
+
+        <ImageView
+            android:id="@+id/dealer4"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
             android:src="@drawable/ace_hearts" />
     </LinearLayout>
 
@@ -55,28 +61,37 @@
         android:layout_marginLeft="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
+        android:layout_marginBottom="100dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
-            android:id="@+id/startImage4"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:id="@+id/player1"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
             android:src="@drawable/four_clubs" />
 
         <ImageView
-            android:id="@+id/startImage5"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:id="@+id/player2"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
             android:src="@drawable/ten_clubs" />
 
         <ImageView
-            android:id="@+id/startImage6"
-            android:layout_width="100dp"
-            android:layout_height="150dp"
+            android:id="@+id/player3"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
+            android:src="@drawable/six_clubs" />
+
+        <ImageView
+            android:id="@+id/player4"
+            android:layout_width="75dp"
+            android:layout_height="100dp"
+            android:layout_weight="0"
             android:src="@drawable/six_clubs" />
     </LinearLayout>
 
@@ -84,7 +99,7 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
+        android:layout_marginBottom="24dp"
         android:text="Dealer cards"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"

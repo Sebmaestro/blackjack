@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Decks
 {
     private int deckId;
-    private ArrayList<ArrayList> decks;
+    private ArrayList<Card> decks;
 
     public Decks()
     {
@@ -14,10 +14,14 @@ public class Decks
 
     public void addDeck(ArrayList<Card> deck)
     {
-        decks.add(deck);
+        //decks.add(deck);
+        for (Card card:deck )
+        {
+            decks.add(card);
+        }
     }
 
-    public ArrayList<ArrayList> getDecks()
+    public ArrayList<Card> getDecks()
     {
         return decks;
     }
