@@ -41,6 +41,36 @@ public class InfoFragment extends Fragment
             }
         });
 
+        Button playAgainButton = (Button) view.findViewById(R.id.playAgainButton);
+        playAgainButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                ((GameActivity)getActivity()).newGame();
+            }
+        });
+
+        Button doubleDownButton = (Button) view.findViewById(R.id.doubleButton);
+        doubleDownButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                ((GameActivity)getActivity()).doubleDown();
+            }
+        });
+
+        Button splitButton = (Button) view.findViewById(R.id.splitButton);
+        splitButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                ((GameActivity)getActivity()).split();
+            }
+        });
+
         return view;
     }
 }

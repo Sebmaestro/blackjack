@@ -1,14 +1,19 @@
 package c17sal.cs.umu.se.blackjacklab3.controller.gameActivity;
 
 import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,24 +36,43 @@ public class GameActivity extends AppCompatActivity
     //private ArrayList<Card> secondDeck;
     private ArrayList<Card> dealerHand;
     private ArrayList<Card> playerHand;
+    private ArrayList<Card> splitHand;
 
     private LinearLayout dealerLinear;
     private LinearLayout playerLinear;
+    private LinearLayout playerLinearSplit;
 
     private TextView dealerScoreTextView;
     private TextView playerScoreTextView;
+    private TextView splitScoreTextView;
+
+    private TextView dealerCardsTextView;
+    private TextView playerCardsTextView;
+    private TextView splitCardsTextView;
+
+    private ImageView imageView;
 
     private Button hit;
     private Button stand;
     private Button doubleDown;
     private Button split;
+    private Button playAgain;
 
     private int dealerScore;
     private int playerScore;
-    private int playerCurrentCard;
-    private int dealerCurrentCard;
+    private int dealerStartScore;
+    private int playerStartScore;
+    private int splitScore1;
+    private int splitScore2;
+
 
     private boolean gameOver = false;
+    private boolean startScores = true;
+    private boolean canDouble = true;
+    private boolean hasBeenSplit = false;
+    private boolean firstHand = true;
+
+    private ConstraintLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,7 +85,10 @@ public class GameActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         /*--------------------------------------------------*/
+
+        layout = findViewById(R.id.Constraintlayout);
         initialize();
+        newGame();
 
 
 
@@ -84,106 +111,299 @@ public class GameActivity extends AppCompatActivity
 
     private void initialize()
     {
-        game = new Game();
-        dealerHand = new ArrayList<>();
-        playerHand = new ArrayList<>();
+        playerCardsTextView = findViewById(R.id.playerCardsTextView);
+        splitCardsTextView = findViewById(R.id.splitCardsTextView);
+        splitCardsTextView.setVisibility(View.INVISIBLE);
+        splitScoreTextView = findViewById(R.id.splitScoreTextView);
+        splitScoreTextView.setVisibility(View.INVISIBLE);
 
+        Decks decks = new Decks();
         clubsArray = getResources().obtainTypedArray(R.array.clubs);
         spadesArray = getResources().obtainTypedArray(R.array.spades);
         heartsArray = getResources().obtainTypedArray(R.array.hearts);
         diamondsArray = getResources().obtainTypedArray(R.array.diamonds);
 
-        Decks decks = new Decks();
-
-        //Nr of decks in play
         for (int i = 0; i < 2; i++)
         {
             decks.addDeck(initDeck());
         }
         allDecks = decks.getDecks();
-        //firstDeck = allDecks.get(0);
-        //secondDeck = allDecks.get(1);
 
-        dealerLinear = findViewById(R.id.linearLayout4);
-        playerLinear = findViewById(R.id.linearLayout3);
+        doubleDown = findViewById(R.id.doubleButton);
+        //doubleDown.setVisibility(View.INVISIBLE);
+        doubleDown.setEnabled(false);
+        doubleDown.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
+        split = findViewById(R.id.splitButton);
+        //split.setVisibility(View.INVISIBLE);
+        split.setEnabled(false);
+        split.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
 
+        playAgain = findViewById(R.id.playAgainButton);
+        playAgain.setVisibility(View.INVISIBLE);
 
-        for (int i = 0; i < dealerLinear.getChildCount(); i++)
-        {
-            dealerLinear.getChildAt(i).setVisibility(View.INVISIBLE);
-        }
-        for (int i = 0; i < playerLinear.getChildCount(); i++)
-        {
-            playerLinear.getChildAt(i).setVisibility(View.INVISIBLE);
-        }
-
-        dealerScore = allDecks.get(0).getValue();
-        playerScore = allDecks.get(1).getValue() + allDecks.get(2).getValue();
-
-        setScores();
-
-        dealStartingCardsForDealer(R.id.dealer1);
-        //dealStartingCardsForPlayer(R.id.dealer2);
-        dealStartingCardsForPlayer(R.id.player1);
-        dealStartingCardsForPlayer(R.id.player2);
+        dealerLinear = findViewById(R.id.linearLayoutDealer);
+        playerLinear = findViewById(R.id.linearLayoutPlayer);
+        playerLinearSplit = findViewById(R.id.linearLayoutSplit);
     }
 
-    public void stand()
+    public void newGame()
     {
-        if (game.canDealerDraw(dealerHand))
+
+        canDouble = true;
+
+        game = new Game();
+        dealerHand = new ArrayList<>();
+        playerHand = new ArrayList<>();
+
+
+        dealerLinear.removeAllViews();
+        playerLinear.removeAllViews();
+        playerLinearSplit.removeAllViews();
+
+
+        playAgain.setVisibility(View.INVISIBLE);
+
+
+
+        dealStartingCardsForDealer();
+        dealStartingCardsForPlayer();
+        dealStartingCardsForPlayer();
+        playerHand.get(0).setValue(11);
+        playerHand.get(1).setValue(11);
+
+        game.calculatePlayerScore(playerHand, "starting");
+
+        dealerStartScore = allDecks.get(0).getValue();
+        playerStartScore = game.getPlayerValue();
+        setScores("startScores");
+
+        if (game.checkDoubleAndSplit(playerHand).equals("splitPossible"))
         {
-            ImageView imageView =
-                    (ImageView) dealerLinear.getChildAt(dealerLinear.getChildCount()-dealerCurrentCard);
-            imageView.setImageResource(allDecks.get(0).getImageId());
-            imageView.setVisibility(View.VISIBLE);
-            dealerScore = dealerScore + allDecks.get(0).getValue();
-            dealerCurrentCard++;
-            setScores();
-            dealerHand.add(allDecks.remove(0));
+            split.setEnabled(true);
+            split.getBackground().clearColorFilter();
         }
+        if (game.checkDoubleAndSplit(playerHand).equals("doublePossible"))
+        {
+            doubleDown.setEnabled(true);
+            doubleDown.getBackground().clearColorFilter();
+        }
+
+    }
+
+    public void split()
+    {
+        splitHand = new ArrayList<>();
+        playerScoreTextView.setText("Split1: ");
+
+        //first or normal hand
+        playerLinear.removeViewAt(1);
+        createImageAndAddToLayout(allDecks, 0, playerLinear);
+        splitHand.add(playerHand.remove(1));
+        playerHand.add(allDecks.get(0));
+        allDecks.remove(0);
+        playerCardsTextView.setText("Split1");
+        playerCardsTextView.setTextColor(Color.GREEN);
+        playerScoreTextView.setTextColor(Color.GREEN);
+        //game.setPlayerValue((game.getPlayerValue()/2)+playerHand.get(1).getValue());
+        //playerHand.get(1).setHasBeenCounted(true);
+
+
+        //split hand
+        createImageAndAddToLayout(splitHand, 0, playerLinearSplit);
+        createImageAndAddToLayout(allDecks, 0, playerLinearSplit);
+        splitHand.add(allDecks.remove(0));
+        splitCardsTextView.setText("Split2");
+        splitCardsTextView.setVisibility(View.VISIBLE);
+
+
+        game.setPlayerValue(playerHand.get(0).getValue());
+        game.calculatePlayerScore(playerHand, "starting");
+        splitScore1 = game.getPlayerValue();
+
+        game.setSplitValue(splitHand.get(0).getValue());
+        game.calculatePlayerScore(splitHand, "split");
+        splitScore2 = game.getSplitValue();
+        splitScoreTextView.setVisibility(View.VISIBLE);
+        setScores("bothSplit");
+
+
+
+        hasBeenSplit = true;
+        split.setEnabled(false);
+        split.getBackground().setColorFilter(0xFFFF0000, PorterDuff.Mode.MULTIPLY);
     }
 
     public void hit()
     {
-        ImageView imageView =
-                (ImageView) playerLinear.getChildAt(playerLinear.getChildCount() - (playerCurrentCard));
-        imageView.setImageResource(allDecks.get(0).getImageId());
-        imageView.setVisibility(View.VISIBLE);
-        playerScore = playerScore + allDecks.get(0).getValue();
-        playerCurrentCard++;
-        setScores();
-        game.checkPlayerValue(playerScore);
-        playerHand.add(allDecks.remove(0));
+        if (game.canPlayerDraw(firstHand))
+        {
+            if (hasBeenSplit && firstHand || !hasBeenSplit)
+            {
+                playerHand.add(allDecks.get(0));
+                game.calculatePlayerScore(playerHand, "starting");
+                createImageAndAddToLayout(allDecks, 0, playerLinear);
+                playerScore = game.getPlayerValue();
+                setScores("player");
+            }
+            else if (hasBeenSplit && !firstHand)
+            {
+                splitHand.add(allDecks.get(0));
+                game.calculatePlayerScore(splitHand, "split");
+                createImageAndAddToLayout(allDecks, 0, playerLinearSplit);
+                splitScore2 = game.getSplitValue();
+                setScores("split");
+            }
+
+            //playerStartScore = playerStartScore + allDecks.get(0).getValue();
+            //playerCurrentCard++;
+
+            allDecks.remove(0);
+
+        }
+
+
+        if (game.checkPlayerValue(playerScore).equals("bust") && firstHand)
+        {
+            playAgain.setVisibility(View.VISIBLE);
+            firstHand = false;
+            //game.setPlayerValue(splitHand.get(0).getValue()+splitHand.get(1).getValue());//
+            splitHand.get(0).setHasBeenCounted(true);
+            splitHand.get(1).setHasBeenCounted(true);
+            playerCardsTextView.setTextColor(Color.BLACK);
+            playerScoreTextView.setTextColor(Color.BLACK);
+            playerScoreTextView.setText("Bust");
+            splitCardsTextView.setTextColor(Color.GREEN);
+            splitScoreTextView.setTextColor(Color.GREEN);
+            //stand();
+        }
+        else if (game.checkPlayerValue(splitScore2).equals("bust"))
+        {
+            playAgain.setVisibility(View.VISIBLE);
+            splitScoreTextView.setText("Bust");
+            splitCardsTextView.setTextColor(Color.BLACK);
+            splitScoreTextView.setTextColor(Color.BLACK);
+        }
     }
 
-    private void setScores()
+    private void createImageAndAddToLayout(ArrayList<Card> playerHand, int i, LinearLayout linearLayout)
     {
-        dealerScoreTextView = findViewById(R.id.dealerTextView);
-        playerScoreTextView = findViewById(R.id.playerTextView);
-
-        dealerScoreTextView.setText("Dealer: " + dealerScore);
-        playerScoreTextView.setText("Player: " + playerScore);
+        imageView = new ImageView(this);
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(150, 250));
+        imageView.setImageResource(playerHand.get(i).getImageId());
+        linearLayout.addView(imageView);
     }
 
-    private void dealStartingCardsForDealer(int id)
+    public void stand()
     {
-        ImageView imageview = findViewById(id);
-        imageview.setImageResource(allDecks.get(0).getImageId());
-        imageview.setVisibility(View.VISIBLE);
+        if (!hasBeenSplit || hasBeenSplit && !firstHand)
+        {
+            splitCardsTextView.setTextColor(Color.BLACK);
+            splitScoreTextView.setTextColor(Color.BLACK);
+            while (game.canDealerDraw(dealerHand))
+            {
+                createImageAndAddToLayout(allDecks, 0, dealerLinear);
+                dealerScore = game.getDealerValue();
+                dealerHand.add(allDecks.remove(0));
+            }
+            dealerScore = game.getDealerValue();
+            setScores("dealer");
+            playAgain.setVisibility(View.VISIBLE);
+
+        }
+        //The second split hand is going
+        else
+        {
+            playAgain.setVisibility(View.VISIBLE);
+            firstHand = false;
+            game.setPlayerValue(splitHand.get(0).getValue()+splitHand.get(1).getValue());
+            splitHand.get(0).setHasBeenCounted(true);
+            splitHand.get(1).setHasBeenCounted(true);
+            playerCardsTextView.setTextColor(Color.BLACK);
+            playerScoreTextView.setTextColor(Color.BLACK);
+            splitCardsTextView.setTextColor(Color.GREEN);
+            splitScoreTextView.setTextColor(Color.GREEN);
+        }
+    }
+
+    public void doubleDown()
+    {
+        if (canDouble)
+        {
+            hit();
+            /*
+            playerHand.add(allDecks.get(0));
+            game.calculatePlayerScore(playerHand, "starting");
+            createImageAndAddToLayout(allDecks, 0, playerLinear);
+
+            playerScore = game.getPlayerValue();
+            setScores("player");
+            allDecks.remove(0);*/
+
+            canDouble = false;
+        }
+    }
+
+
+
+    private void setScores(String id)
+    {
+        dealerScoreTextView = findViewById(R.id.dealerScoreTextView);
+        playerScoreTextView = findViewById(R.id.playerScoreTextView);
+
+        switch (id)
+        {
+            case ("player"):
+                playerScoreTextView.setText("Player: " + playerScore);
+                break;
+
+            case ("dealer"):
+                dealerScoreTextView.setText("Dealer: " + dealerScore);
+                break;
+
+            case ("startScores"):
+                dealerScoreTextView.setText("Dealer: " + dealerStartScore);
+                playerScoreTextView.setText("Player: " + playerStartScore);
+                break;
+
+            case ("bothSplit"):
+                playerScoreTextView.setText("Split1: "+splitScore1);
+                splitScoreTextView.setText("Split2: "+splitScore2);
+                break;
+
+            case ("split"):
+                splitScoreTextView.setText("Split2: "+splitScore2);
+        }
+    }
+
+    private void dealStartingCardsForDealer()
+    {
+        //ImageView imageview = findViewById(id);
+        createImageAndAddToLayout(allDecks, 0, dealerLinear);
 
         dealerHand.add(allDecks.remove(0));
-        dealerCurrentCard = 1;
     }
 
-    private void dealStartingCardsForPlayer(int id)
+    private void dealStartingCardsForPlayer()
     {
         //Card card = (Card) firstDeck.get(0);
-        ImageView imageview = findViewById(id);
-        imageview.setImageResource(allDecks.get(0).getImageId());
-        imageview.setVisibility(View.VISIBLE);
+        //ImageView imageview = findViewById(id);
+        //imageView = new ImageView(this);
+        //imageView.setLayoutParams(new ViewGroup.LayoutParams(150,250));
+        //imageView.setMaxHeight(75);
+        //imageView.setMinimumHeight(75);
+        //imageView.setMaxWidth(50);
+        //imageView.setMinimumWidth(50);
+        //imageView.setImageResource(allDecks.get(0).getImageId());
+        //imageView.setVisibility(View.VISIBLE);
+        //imageView.setImageResource(allDecks.get(0).getImageId());
+        //imageView.setVisibility(View.VISIBLE);
+        //playerLinear.addView(imageView);
+
+        createImageAndAddToLayout(allDecks, 0, playerLinear);
+
+
 
         playerHand.add(allDecks.remove(0));
-        playerCurrentCard = 2;
     }
 
     public ArrayList<Card> initDeck()

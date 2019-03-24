@@ -5,16 +5,20 @@ public class Card
     private Suit suit;
     private int value;
     private int imageId;
+    private boolean hasBeenCounted;
 
     public enum Suit
     {
         SPADES, CLUBS, HEARTS, DIAMONDS
     }
 
+
+
     public Card(Suit suit, int value, int imageId)
     {
         this.suit = suit;
         this.imageId = imageId;
+        hasBeenCounted = false;
 
         switch (value)
         {
@@ -54,5 +58,20 @@ public class Card
     public int getImageId()
     {
         return imageId;
+    }
+
+    public void setValue(int value)
+    {
+        this.value = value;
+    }
+
+    public void setHasBeenCounted(boolean hasBeenCounted)
+    {
+        this.hasBeenCounted = hasBeenCounted;
+    }
+
+    public boolean isHasBeenCounted()
+    {
+        return hasBeenCounted;
     }
 }
