@@ -5,5 +5,18 @@
     <string name="play_button">Play</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="info_to_user">
+        The rules for this blackjack game is as follows: \n\n
+        - You start with 1000 money and if you get 0 you lose the game. \n
+        - You start the game by checking the box which contains the amount of money you want to
+        bet. \n
+        - Dealer draws on 16 and stays on 17. \n
+        - If you get 21 for your first hand and dealer does not you win 2.5 your money.\n
+        - If you tie with dealer you keep your bet. \n
+        - You can split your cards for double your bet and are able to split only one time when the
+        value of your first two cards are the same. \n
+        - If you have 9, 10 or 11 with two cards you are able to double down your bet. This can be
+        done either normally or after splitting. \n
+    </string>
+    <string name="title_activity_help">HelpActivity</string>
 </resources>

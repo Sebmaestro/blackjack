@@ -47,7 +47,7 @@ public class InfoFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                ((GameActivity)getActivity()).newGame();
+                ((GameActivity)getActivity()).finish();
             }
         });
 
